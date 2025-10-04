@@ -1,0 +1,41 @@
+{
+  "name": "byte-cafe",
+  "version": "0.0.0-alpha.1",
+  "description": "A lovely cafe that serves you bytes.",
+  "homepage": "https://github.com/natsie/byte-cafe#readme",
+  "author": "Oghenevwegba Obire",
+  "license": "MIT",
+  "main": "dist/cafe.js",
+  "type": "module",
+  "keywords": [
+    "cafe",
+    "http",
+    "server",
+    "cache"
+  ],
+  "bin": {
+    "cafe": "dist/bin.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --experimental-strip-types --watch src/dev.ts",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "arktype": "^2.1.22"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "chai": "^6.2.0",
+    "mocha": "^11.7.4",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
+  },
+  "bugs": {
+    "url": "https://github.com/natsie/byte-cafe/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natsie/byte-cafe.git"
+  }
+}
