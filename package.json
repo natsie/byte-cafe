@@ -1,26 +1,32 @@
 {
   "name": "byte-cafe",
-  "version": "0.0.0-alpha.2",
+  "version": "0.0.0-alpha.3",
   "description": "A lovely cafe that serves you bytes.",
   "homepage": "https://github.com/natsie/byte-cafe#readme",
   "author": "Oghenevwegba Obire",
   "license": "MIT",
-  "main": "dist/cafe.js",
-  "type": "module",
   "keywords": [
     "cafe",
     "http",
     "server",
     "cache"
   ],
+  "type": "module",
+  "main": "dist/cafe.js",
+  "types": "dist/cafe.d.ts",
   "bin": {
     "cafe": "dist/bin.js"
   },
   "scripts": {
     "build": "tsc",
+    "build:mimedb": "node dist/mime-types/buildDB.js",
+    "build:all": "tsc && node dist/mime-types/buildDB.js",
     "dev": "node --experimental-strip-types --watch src/bin.ts",
     "test": "mocha"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.5.2",

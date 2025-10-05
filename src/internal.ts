@@ -1,8 +1,13 @@
 import type { Cafe } from "./cafe.ts";
 import type { ICafe } from "./types.ts";
 import { nonNull } from "./utils.ts";
+
 import { open, type FileHandle } from "node:fs/promises";
-import { matchesGlob, resolve } from "node:path";
+import { extname, matchesGlob, resolve } from "node:path";
+
+const extensionMap = (
+  await import("./mime-types/ext-map.json", { with: { type: "json" } })
+).default as Record<string, string>;
 
 export const cafeData: Map<Cafe, ICafe.Data> = new Map();
 export const getCafeData = (cafe: Cafe): ICafe.Data => nonNull(cafeData.get(cafe));
@@ -82,6 +87,8 @@ const serveFile = async (order: ICafe.Server.CustomerOrderData): Promise<null> =
     const readStream = handle.createReadStream();
     const headers = {
       "content-length": stats.size,
+      "content-type":
+        extensionMap[extname(resolvedPath).slice(1)] || "application/octet-stream",
     };
 
     response.writeHead(200, "Successful", headers);
