@@ -1,6 +1,6 @@
 {
   "name": "byte-cafe",
-  "version": "0.0.0-alpha.1",
+  "version": "0.0.0-alpha.2",
   "description": "A lovely cafe that serves you bytes.",
   "homepage": "https://github.com/natsie/byte-cafe#readme",
   "author": "Oghenevwegba Obire",
@@ -18,12 +18,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "node --experimental-strip-types --watch src/dev.ts",
+    "dev": "node --experimental-strip-types --watch src/bin.ts",
     "test": "mocha"
   },
-  "dependencies": {
-    "arktype": "^2.1.22"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.5.2",
     "chai": "^6.2.0",

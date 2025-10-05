@@ -1,8 +1,8 @@
 import { createServer } from "node:http";
 import { defer, nonNull, noop } from "./utils.ts";
 import type { ICafe } from "./types.ts";
-import { createRequestListener, getCafeData, registerCafe } from "./internal.ts";
-import { CafeListenArgs } from "./schema.js";
+import { getCafeData, registerCafe } from "./internal.ts";
+import { v } from "./validator.ts";
 
 const createCafeData = (instance: Cafe, config: ICafe.UserConfig): ICafe.Data => ({
   server: createServer(),
@@ -28,14 +28,14 @@ class Cafe {
     return getCafeData(this).port;
   }
 
-  listen(...listenArgs: typeof CafeListenArgs.infer): Promise<Cafe> {
+  listen(...listenArgs: ICafe.Internal.ListenArgs): Promise<Cafe> {
     const data = getCafeData(this);
     if (data.listening) return Promise.resolve(this);
 
+    v["Cafe#listen:Args"](listenArgs);
     let port: number | number[] | null = null;
-    let callback: (cafe: Cafe) => void = noop;
+    let callback: (cafe: Cafe) => void = listenArgs[1] || noop;
 
-    CafeListenArgs.assert(listenArgs);
     switch (typeof listenArgs[0]) {
       case "number":
         port = listenArgs[0];

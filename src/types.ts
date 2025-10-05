@@ -1,4 +1,5 @@
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
+import type { Cafe } from "./cafe.ts";
 
 export type AnyFunction = (...args: unknown[]) => unknown;
 
@@ -50,6 +51,14 @@ namespace ICafe {
     parsePresets?: boolean;
     port?: number;
     serveDirectories?: boolean;
+  }
+
+  export namespace Internal {
+    export type ListenPortSpec = number | number[] | null;
+    export type ListenCallback = (cafe: Cafe) => void;
+    export type ListenArgs =
+      | [(ListenPortSpec | ListenCallback)?]
+      | [ListenPortSpec, ListenCallback?];
   }
 }
 
