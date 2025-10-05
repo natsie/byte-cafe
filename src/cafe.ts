@@ -1,7 +1,8 @@
 import { createServer } from "node:http";
-import { defer, nonNull } from "./utils.ts";
+import { defer, nonNull, noop } from "./utils.ts";
 import type { ICafe } from "./types.ts";
 import { createRequestListener, getCafeData, registerCafe } from "./internal.ts";
+import { CafeListenArgs } from "./schema.js";
 
 const createCafeData = (instance: Cafe, config: ICafe.UserConfig): ICafe.Data => ({
   server: createServer(),
@@ -27,12 +28,29 @@ class Cafe {
     return getCafeData(this).port;
   }
 
-  listen(
-    port?: number | number[] | null,
-    callback?: (cafe: Cafe) => unknown,
-  ): Promise<Cafe> {
+  listen(...listenArgs: typeof CafeListenArgs.infer): Promise<Cafe> {
     const data = getCafeData(this);
     if (data.listening) return Promise.resolve(this);
+
+    let port: number | number[] | null = null;
+    let callback: (cafe: Cafe) => void = noop;
+
+    CafeListenArgs.assert(listenArgs);
+    switch (typeof listenArgs[0]) {
+      case "number":
+        port = listenArgs[0];
+        break;
+      case "function":
+        callback = listenArgs[0];
+        break;
+      case "object":
+        if (Array.isArray(listenArgs[0])) {
+          port = listenArgs[0];
+        }
+        break;
+      default:
+        throw new TypeError("Invalid arguments.");
+    }
 
     const ports = port == null ? [data.port] : Array.isArray(port) ? port : [port];
     return new Promise(async (resolve, reject) => {
@@ -75,11 +93,9 @@ class Cafe {
 
       if (successful) {
         data.listening = true;
-        resolve(this);
 
-        if (typeof callback === "function") {
-          setImmediate(callback, this);
-        }
+        setImmediate(callback, this);
+        resolve(this);
       } else {
         reject(new Error("The server could not bind to any of the specified ports."));
       }

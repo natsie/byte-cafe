@@ -1,3 +1,4 @@
+#!usr/bin/env node
 import { resolve } from "node:path";
 import { Cafe } from "./cafe.ts";
 import { argv, cwd } from "node:process";
